@@ -1569,7 +1569,12 @@ public class PDFFile {
      * @param pagenum the number of the page to get commands for
      */
     public PDFPage getPage(int pagenum) {
-        return getPage(pagenum, false);
+        return getPage(pagenum, 0, false);
+    }
+    
+    
+    public PDFPage getPage(int pagenum, int rotation) {
+        return getPage(pagenum, rotation, false);
     }
 
     /**
@@ -1579,6 +1584,10 @@ public class PDFFile {
      * @param wait if true, do not exit until the page is complete.
      */
     public PDFPage getPage(int pagenum, boolean wait) {
+    	return getPage(pagenum, 0, false);
+    }
+    
+    public PDFPage getPage(int pagenum, int rotation, boolean wait) {
         Integer key = Integer.valueOf(pagenum);
         HashMap<String,PDFObject> resources = null;
         PDFObject pageObj = null;
@@ -1597,7 +1606,7 @@ public class PDFFile {
                     return null;
                 }
 
-                page = createPage(pagenum, pageObj);
+                page = createPage(pagenum, rotation, pageObj);
 
                 byte[] stream = getContents(pageObj);
                 parser = new PDFParser(page, stream, resources);
@@ -1681,9 +1690,8 @@ public class PDFFile {
      *
      * @param pageObj the PDF object for the page to be created
      */
-    private PDFPage createPage(int pagenum, PDFObject pageObj)
+    private PDFPage createPage(int pagenum, int rotation, PDFObject pageObj)
             throws IOException {
-        int rotation = 0;
         Rectangle2D mediabox = null; // third choice, if no crop
         Rectangle2D cropbox = null; // second choice
         Rectangle2D trimbox = null; // first choice
@@ -1705,7 +1713,7 @@ public class PDFFile {
 
         PDFObject rotateObj = getInheritedValue(pageObj, "Rotate");
         if (rotateObj != null) {
-            rotation = rotateObj.getIntValue();
+            // rotation = rotateObj.getIntValue();
         }
 
         // read annotations and add them to the PDF page
