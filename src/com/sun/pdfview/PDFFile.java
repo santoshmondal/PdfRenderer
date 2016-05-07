@@ -1592,8 +1592,10 @@ public class PDFFile {
         HashMap<String,PDFObject> resources = null;
         PDFObject pageObj = null;
 
-        PDFPage page = this.cache.getPage(key);
-        PDFParser parser = this.cache.getPageParser(key);
+        // PDFPage page = this.cache.getPage(key);
+        // PDFParser parser = this.cache.getPageParser(key);
+        PDFPage page = null;
+        PDFParser parser = null;
         if (page == null) {
             try {
                 // hunt down the page!
@@ -1715,6 +1717,7 @@ public class PDFFile {
         if (rotateObj != null) {
             // rotation = rotateObj.getIntValue();
         }
+        
 
         // read annotations and add them to the PDF page
         PDFObject annots = getInheritedValue(pageObj, "Annots");
